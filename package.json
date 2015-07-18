@@ -1,0 +1,31 @@
+{
+  "name": "s-cockpit-pipe",
+  "version": "0.0.0",
+  "description": "Pipes stdin to s-cockpit",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover _mocha --report html --dir ./report/coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schornio/s-cockpit-pipe.git"
+  },
+  "keywords": [
+    "log",
+    "logger",
+    "stdin",
+    "pipe",
+    "cockpit"
+  ],
+  "author": "Thomas Schorn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schornio/s-cockpit-pipe/issues"
+  },
+  "homepage": "https://github.com/schornio/s-cockpit-pipe#readme",
+  "devDependencies": {
+    "chai": "^3.1.0",
+    "istanbul": "^0.3.17",
+    "mocha": "^2.2.5"
+  }
+}
