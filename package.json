@@ -1,8 +1,11 @@
 {
   "name": "s-cockpit-pipe",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Pipes stdin to s-cockpit",
   "main": "index.js",
+  "bin": {
+    "s-cockpit-pipe": "./cli.js"
+  },
   "scripts": {
     "test": "istanbul cover _mocha --report html --dir ./report/coverage"
   },
@@ -28,5 +31,8 @@
     "istanbul": "^0.3.17",
     "mocha": "^2.2.5",
     "stream-buffers": "^2.2.0"
+  },
+  "dependencies": {
+    "winston": "^1.0.1"
   }
 }

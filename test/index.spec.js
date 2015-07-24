@@ -1,5 +1,5 @@
 'use strict';
-/* jslint node: true */
+/* jslint node: true, expr:true */
 /* global describe, it, before, after  */
 
 var TEST_SOCKET_PATH = __dirname + '/test.socket';
@@ -12,8 +12,8 @@ var streamBuffers = require("stream-buffers");
 var expect = require('chai').expect;
 
 describe ('s-cockpit-pipe', function () {
-  process.env.S_COCKPIT_SOCKET_PATH = TEST_SOCKET_PATH;
-
+  process.env.LOG_LEVEL = 'off';
+  
   var sCockpitPipe = require(__dirname + '/../index.js');
   var socketListener;
 
@@ -30,18 +30,31 @@ describe ('s-cockpit-pipe', function () {
     var fakeStdInBuffer = new streamBuffers.ReadableStreamBuffer();
     var fakeStdIn = new stream.Readable().wrap(fakeStdInBuffer);
 
-    socketListener.on('readable', function () {
-      var chunk = socketListener.read();
-      var chunkString = chunk.toString();
-      var chunkObject = JSON.parse(chunkString);
+    socketListener.on('connection', function (connection) {
+      connection.on('readable', function () {
+        var chunk = connection.read();
+        var chunkString = chunk.toString();
+        var chunkObject = JSON.parse(chunkString);
 
-      expect(chunkObject).to.be.eql({ cs: 'Hallo Welt' });
+        expect(chunkObject).to.be.eql({ cs: 'Hallo Welt' });
+        done();
+      });
+    });
+
+    sCockpitPipe(fakeStdIn, { socketPath: TEST_SOCKET_PATH });
+
+    fakeStdInBuffer.put('Hallo Welt', 'utf8');
+  });
+
+  it ('should emit an error callback when something odd happes', function (done) {
+    var fakeStdInBuffer = new streamBuffers.ReadableStreamBuffer();
+    var fakeStdIn = new stream.Readable().wrap(fakeStdInBuffer);
+
+    sCockpitPipe(fakeStdIn, { socketPath: __dirname + 'invalid/path/log.socket' }, function (error) {
+      expect(error).to.be.ok;
       done();
     });
 
-    sCockpitPipe(fakeStdIn);
-
-    fakeStdInBuffer.put('Hallo Welt', 'utf8');
   });
 
 });
