@@ -17,7 +17,13 @@ function sCockpitPipe (readable, options, callback) {
     readable.on('readable', function () {
       log.debug('Chunk ready');
 
-      var chunkString = readable.read().toString();
+      var chunk = readable.read();
+
+      if(!chunk) {
+        return;
+      }
+
+      var chunkString = chunk.toString();
       var chunkObj = { cs: chunkString };
       var serializedChunkObj = JSON.stringify(chunkObj);
 
